@@ -1,8 +1,8 @@
 ---
-- name: creating new mac extended acl {{ACL_NAME}} and filling it
+- name: creating new mac extended acl {{ ACL_NAME }} and filling it
   ios_config:
     before: 
-     - mac access-list extended {{ACL_NAME}}
+     - mac access-list extended {{ ACL_NAME }}
     lines: "{{ acl_lines }}"
     provider: "{{ cli }}"
 
@@ -10,9 +10,9 @@
   ios_config:
     parents: interface {{ item }}
     lines:
-      - mac access-group {{ACL_NAME}} in
+      - mac access-group {{ ACL_NAME }} in
     provider: "{{ cli }}"
-  with_items: " {{WIFI_PORTS}} "
+  with_items: " {{ WIFI_PORTS }} "
   
 - name: list all mac extended acl names
   ios_command:
@@ -27,7 +27,7 @@
     lines:
       - no mac access-list extended {{ item }}
     provider: "{{ cli }}"
-  #we need to awk acl name from output
+  #we need to get acl name from output
   with_items: "{{ acl_list_names.stdout_lines|regex_replace('mac access-list extended ','') }}"
   #we skip our new acl and we can delete only ^wifi[0-9]+
-  when: item != "{{ACL_NAME}}" and (item | search("^wifi[0-9]+"))
+  when: item != "{{ ACL_NAME }}" and (item | search("^wifi[0-9]+"))
