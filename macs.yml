@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: no
+  connection: local
+  vars:
+    cli:
+      host: "{{ inventory_hostname }}"
+      username: "{{ ansible_ssh_user }}"
+      password: "{{ ansible_ssh_pass }}"
+      authorize: yes
+      auth_pass: "{{ enable_pass }}"
+      transport: cli
+      timeout: 20
+  vars_files:
+    - "{{ acl_list }}"
+  roles:
+    - change_acl
